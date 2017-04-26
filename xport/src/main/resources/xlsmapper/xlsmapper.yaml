@@ -1,0 +1,69 @@
+
+# 如果 [<scope>:]表名 部分重复，则后面的覆盖前面的，如果多个配置文件中有重复，视加载顺序而定，不建议出现重复
+# 表名前面可以添加 '<scope>:' (':'后面不要加空格)，以区分同一张表的导入导出配置
+# scope可以有3种配置：import，export，global，分别代表应用到导入，导出，导入和导出，如果不添加或无法识别，默认global
+# 导出设置中，如果字段不设置name，默认根据数据库字段命名，如果不设置index，默认按顺序设置
+#
+# 表头：
+# 1.强烈建议指定headRow，否则程序会试图识别表头行(根据字段的name配置匹配，不靠谱，见第4条)，如果配置了自定义headResolver(建议)，则
+#   优先调用headResolver判断表头行，如果dataRow之前始终无法识别出表头，程序会将dataRow开始作为数据(不靠谱)
+# 2.强烈建议指定dataRow，否则默认将表头行后开始作为数据
+# 3.如果即没有指定dataRow和headRow，且始终无法识别表头行，为了防止继续解析浪费资源，到maxHeadRow(默认15)时抛出异常，导入失败
+# 4.在第1条描述的情况中，默认的headResolver根据字段name匹配，当行数据包含了guaFields(默认2)个字段name时，即视为表头行，这种情况
+#   建议避免，可能出现不可预料情况
+# 5.复杂表头(合并单元格，多行等)无法自动识别，该种情况下必须指定自定义headResolver，或者指定表的dataRow以及每个字段的index，
+#   使程序忽略表头，此时字段的name无效
+#
+# 该配置中没有针对sheet的配置，在导入中，一个表的配置实际就是一个sheet的配置，多个sheet可以配置为多个表，配置表名为"表名.sheet名"
+#
+
+testbean:
+  dataRow: 1
+  fields:
+    id:
+      index: 0
+      name: id
+    name:
+      index: 1
+      name: 姓名
+    age:
+      index: 2
+      name: 年龄
+    address:
+      index: 3
+      name: 地址
+    phone:
+      column: e
+      name: 电话
+    email:
+      column: f
+    birthday:
+      column: g
+      name: 生日
+    gender: 7
+    married: 8
+    register: 9
+    score: 10
+    type: 11
+    educational: 12
+testbean2:
+  fields:
+    id:
+      index: 0
+      name: id
+    name:
+      index: 1
+      name: 姓名
+    age:
+      index: 2
+      name: 年龄
+    address:
+      index: 3
+      name: 地址
+    phone:
+      column: e
+      name: 电话
+
+
+
+
